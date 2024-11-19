@@ -1,27 +1,26 @@
 import { Router } from 'express';
 import {
-  getAllUsers,
-  getUserById,
+  getUsers,
   createUser,
-  updateUser,
-  deleteUser,
-  addFriend,
-  removeFriend
-} from '../controllers/userController';
+    deleteUser,
+    updateUser,
+    getSingleUser,
 
-const router: Router = Router();
+} from '../controllers/userController.js';
+
+const router = Router();
 
 router.route('/')
-  .get(getAllUsers)
-  .post(createUser);
+  .get(getUsers)
+.post(createUser);
 
-router.route('/:id')
-  .get(getUserById)
-  .put(updateUser)
-  .delete(deleteUser);
+router.route('/:userId')
+.get(getSingleUser)
+.put(updateUser)
+.delete(deleteUser);
 
 router.route('/:userId/friends/:friendId')
-  .post(addFriend)
-  .delete(removeFriend);
+  //.post(addFriend)
+  //.delete(removeFriend);
 
 export default router;

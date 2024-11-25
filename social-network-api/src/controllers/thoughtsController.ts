@@ -12,11 +12,16 @@ export const getThoughts = async  (_req: Request, res: Response) => {
 export const createThought = async  (_req: Request, res: Response) => {
   try {
     const thought = await Thought.create(_req.body);
-    res.status(200).json(thought);
+
+    await Thought.findByIdAndUpdate(_req.body.userId, { $push: { thoughts: thought._id } });
+
+    res.json({ message: 'Thought created!' });
   } catch (err) {
     res.status(500).json(err);
   }
 };
+
+
 
 export const getSingleThought = async  (_req: Request, res: Response) => {
   try {
@@ -46,3 +51,29 @@ export const deleteThought = async  (_req: Request, res: Response) => {
     res.status(500).json(err);
   }
 };
+export const addReaction = async  (_req: Request, res: Response) => {
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      _req.params.thoughtId,
+      { $push: { reactions: _req.body } },
+      { new: true }
+    );
+    res.status(200).json(thought);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const removeReaction = async  (_req: Request, res: Response) => {
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      _req.params.thoughtId,
+      { $pull: { reactions: { reactionId: _req.params.reactionId } } },
+      { new: true }
+    );
+    res.status(200).json(thought);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
